@@ -2,7 +2,7 @@
 
 Here, you will find the code related to the online multiple input spectrogram inversion (oMISI) algorithm for source separation.
 
-If you use any of the things existing in this repository, please cite the [corresponding paper](https://arxiv.org/abs/1802.03156). 
+If you use any of the things existing in this repository, please cite the [corresponding paper](https://arxiv.org/abs/1911.03128). 
 
 You can also find an online demo with sound examples related to this work on the [companion website](https://magronp.github.io/demos/spl19_omisi.html).
 
