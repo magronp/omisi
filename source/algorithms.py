@@ -147,10 +147,11 @@ def omisi(mixture_stft, spectrograms_target, win_length, hop_length=None, init_m
         #estimated_sources[sample_start:(sample_start + hop_length), :] = s_ola[:hop_length, :]
         #s_current = np.concatenate((s_ola[hop_length:, :], np.zeros((hop_length, nsrc))))
         estimated_sources[sample_start:(sample_start + win_length + future_frames * hop_length), :] = s_ola
-
+        
+        # Update the current fixed segment (ignore the future frames but account for the overlapped past frames)
         s_partial = my_istft(np.reshape(Y_dft_norm[:, 0, :], (n_freqs, 1, nsrc)), win_length=win_length, hop_length=hop_length, win_type=win_type)
-        s_current = np.concatenate((s_partial[hop_length:, :], np.zeros((win_length + (future_frames-1) * hop_length, nsrc))))
-
+        s_current = np.concatenate((s_current[hop_length:win_length, :] + s_partial[hop_length:, :], np.zeros(((future_frames+1) * hop_length, nsrc))))
+    
     sdr = []
     if not(src_ref is None):
         sdr = get_separation_score(src_ref, estimated_sources)
