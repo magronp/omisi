@@ -10,7 +10,7 @@ The following Python librairies are necessary to run the code properly:
 - [Scipy](https://www.scipy.org/)
 - [Matplotlib](https://matplotlib.org/)
 - [Librosa](https://librosa.org/)
-- [Librosa](https://pypi.org/project/SoundFile/)
+- [Soundfile](https://pypi.org/project/SoundFile/)
 
 The paper uses the [Danish HINT dataset](https://www.ncbi.nlm.nih.gov/pubmed/21319937), which shall be placed in the `data/HINT` folder.
 If you use this dataset, you will end up with the proper directory structure and file names.
