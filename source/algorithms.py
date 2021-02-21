@@ -67,7 +67,8 @@ def misi(mixture_stft, spectrograms_target, win_length, hop_length=None, src_ref
     return estimated_sources, error, sdr
 
 
-def omisi(mixture_stft, spectrograms_target, win_length, hop_length=None, init_method='mix', future_frames=1, src_ref=None, phase_true=None, max_iter=5, win_type='hann'):
+def omisi(mixture_stft, spectrograms_target, win_length, hop_length=None, init_method='mix', future_frames=1,
+          src_ref=None, phase_true=None, max_iter=5, win_type='hann'):
     """The online multiple input spectrogram inversion algorithm for source separation.
     Args:
         mixture_stft: numpy.ndarray (nfreqs, nframes) - input mixture STFT
@@ -86,7 +87,8 @@ def omisi(mixture_stft, spectrograms_target, win_length, hop_length=None, init_m
     """
     # For a null look-ahead, use a slightly faster version of oMISI
     if future_frames == 0:
-        estimated_sources, sdr = omisi_fast(mixture_stft, spectrograms_target, win_length, hop_length, init_method, src_ref, phase_true, max_iter, win_type)
+        estimated_sources, sdr = omisi_fast(mixture_stft, spectrograms_target, win_length, hop_length, init_method,
+                                            src_ref, phase_true, max_iter, win_type)
         return estimated_sources, sdr
 
     if hop_length is None:
@@ -129,7 +131,7 @@ def omisi(mixture_stft, spectrograms_target, win_length, hop_length=None, init_m
 
         # Overlap add
         s_ola = s_current + s_wind
-
+        Y_dft_norm = None # Pre-define for avoiding warning
         for iter in range(max_iter):
             # partial STFT
             Y_dft = my_stft(s_ola, win_length=win_length, hop_length=hop_length, n_fft=n_fft, win_type='hanning')
@@ -144,8 +146,6 @@ def omisi(mixture_stft, spectrograms_target, win_length, hop_length=None, init_m
             s_ola = s_current + s_wind
 
         phase_current = np.angle(Y_dft_corrected)[:, 1:, :]
-        #estimated_sources[sample_start:(sample_start + hop_length), :] = s_ola[:hop_length, :]
-        #s_current = np.concatenate((s_ola[hop_length:, :], np.zeros((hop_length, nsrc))))
         estimated_sources[sample_start:(sample_start + win_length + future_frames * hop_length), :] = s_ola
         
         # Update the current fixed segment (ignore the future frames but account for the overlapped past frames)

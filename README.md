@@ -1,13 +1,38 @@
-# Online MISI GitHub repository
+# Online Spectrogram inversion for audio source separation (OMISI)
 
-Here, you will find the code related to the online multiple input spectrogram inversion (oMISI) algorithm for source separation.
+Here is the code related to the article entitled [Online Spectrogram Inversion for Low-Latency Audio Source Separation](https://arxiv.org/abs/1911.03128).
+Audio examples of recovered source signals are available on the [companion website](https://magronp.github.io/demos/spl20_omisi.html).
 
-If you use any of the things existing in this repository, please cite the [corresponding paper](https://arxiv.org/abs/1911.03128). 
+# Setup
 
-You can also find an online demo with sound examples related to this work on the [companion website](https://magronp.github.io/demos/spl19_omisi.html).
+The following Python librairies are necessary to run the code properly:
+- [Numpy](https://numpy.org/)
+- [Scipy](https://www.scipy.org/)
+- [Matplotlib](https://matplotlib.org/)
+- [Librosa](https://librosa.org/)
+- [Librosa](https://pypi.org/project/SoundFile/)
 
-This code allows to reproduce the experiment in the Oracle scenario conducted in the paper. To do so, you will need the [Danish HINT dataset](https://www.ncbi.nlm.nih.gov/pubmed/21319937) and to place its content in the `data/HINT` folder.
+The paper uses the [Danish HINT dataset](https://www.ncbi.nlm.nih.gov/pubmed/21319937), which shall be placed in the `data/HINT` folder.
+If you use this dataset, you will end up with the proper directory structure and file names.
+If you want to use a different dataset, then you can edit the corresponding function (``source/audio_handler.py``) accordingly.
 
-If you use this dataset, you will end up with the proper directory structure and file names. If you want to use a different dataset, then you can edit the audio handler function accordingly.
+# Reproducing the results from the paper
 
-To run the benchmark as done in the paper, simply run the "main.py" script.
+This code allows to reproduce the experiment in the Oracle scenario (Table 1) conducted in the paper.
+To run the benchmark as done in the paper, simply run the ``main.py`` script.
+
+
+### Reference
+
+<details><summary>If you use any of this code for your research, please cite our paper:</summary>
+  
+```latex
+@article{Magron2020omisi,
+  Title                    = {Online Spectrogram Inversion for Low-Latency Audio Source Separation},
+  Author                   = {Paul Magron AND Tuomas Virtanen},
+  Journal                  = {IEEE Signal Processing Letters},
+  Year                     = {2020},
+  Pages                    = {306--310},
+  Volume                   = {27}
+}
+```

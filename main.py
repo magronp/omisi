@@ -12,7 +12,8 @@ __author__ = 'Paul Magron -- IRIT'
 __docformat__ = 'reStructuredText'
 
 
-def apply_separation_algos(mixture_stft, spectrograms_target, src_ref, audio_folder_path, estim_or_oracle, win_length=256, hop_length=128, max_iter=15, fs=16000, win_type='hann'):
+def apply_separation_algos(mixture_stft, spectrograms_target, src_ref, audio_folder_path, estim_or_oracle='oracle',
+                           win_length=256, hop_length=128, max_iter=15, fs=16000, win_type='hann'):
     """A function that applies all separation algorithms for benchmarking spectrogram inversion.
     Args:
         mixture_stft: numpy.ndarray (nfreqs, nframes) - input mixture STFT
@@ -122,7 +123,7 @@ def main(folders, parameters):
             # STFTs
             src_ref_stft = my_stft(src_ref, n_fft=n_fft, hop_length=hop_length, win_length=win_length)
             mixture_stft = np.sum(src_ref_stft, axis=2)
-            spectrograms_true = np.abs(src_ref_stft)
+            spectro_ref = np.abs(src_ref_stft)
 
             # iSTFT (for having proper time domain size)
             src_ref = my_istft(src_ref_stft, hop_length=hop_length, win_length=win_length)
@@ -135,14 +136,14 @@ def main(folders, parameters):
                 os.makedirs(audio_folder_path)
         
             # Separation algorithms
-            sdr_online, sdr_misi, error_misi =\
-                apply_separation_algos(mixture_stft, spectrograms_true, src_ref, audio_folder_path, 'oracle', \
-                win_length=win_length, hop_length=hop_length, max_iter=15, fs=fs, win_type=win_type)
+            sdr_omisi, sdr_misi, err_misi =\
+                apply_separation_algos(mixture_stft, spectro_ref, src_ref, audio_folder_path, win_length=win_length,
+                                       hop_length=hop_length, max_iter=15, fs=fs, win_type=win_type)
             
             # Record score
-            metric_omisi[:, ic] = sdr_online
+            metric_omisi[:, ic] = sdr_omisi
             metric_misi[:, 0, ic] = sdr_misi
-            metric_misi[:, 1, ic] = error_misi
+            metric_misi[:, 1, ic] = err_misi
 
             ic += 1
 
@@ -162,16 +163,16 @@ if __name__ == '__main__':
                   'win_type': 'hann'
                   }
                   
-    # Chosen speaker pair
-    indx_speaker = 0             
-    # Get folders for inputs / outputs
-    folders = folder_handler(parameters, indx_speaker)
-    
-    # Run the evaluation
-    main(folders, parameters)
-    
-    # Plot the results
-    display_results(folders['outputs'])
+    # Loop over the 3 speaker pairs configurations (F-F, M-M and F-M)
+    for indx_speaker in [0, 1, 2]:
+        # Get folders for inputs / outputs
+        folders = folder_handler(parameters, indx_speaker)
+
+        # Run the evaluation
+        main(folders, parameters)
+
+        # Plot the results
+        display_results(folders['outputs'])
 
 
 # EOF
