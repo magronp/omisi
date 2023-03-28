@@ -5,13 +5,13 @@ Audio examples of recovered source signals are available on the [companion websi
 
 # Setup
 
-The following Python librairies are necessary to run the code properly:
-- [Numpy](https://numpy.org/)
-- [Scipy](https://www.scipy.org/)
-- [Matplotlib](https://matplotlib.org/)
-- [Librosa](https://librosa.org/)
-- [Soundfile](https://pypi.org/project/SoundFile/)
+The needed packages are listed in `requirements.txt`.
+For convenience, you can create a virtual environment and automatically install them as follows:
 
+    python3 −m venv env
+    source env/bin/activate
+    pip3 install -r requirements.txt
+    
 The paper uses the [Danish HINT dataset](https://www.ncbi.nlm.nih.gov/pubmed/21319937), which shall be placed in the `data/HINT` folder.
 If you use this dataset, you will end up with the proper directory structure and file names.
 If you want to use a different dataset, then you can edit the corresponding function (``source/audio_handler.py``) accordingly.

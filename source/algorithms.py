@@ -6,8 +6,9 @@ import numpy as np
 from source.tf_transforms import my_stft, my_istft, norm_synthesis_window
 from source.metrics import get_separation_score
 import scipy
-import librosa
 from scipy import signal
+import librosa
+
 
 __author__ = 'Paul Magron -- IRIT'
 __docformat__ = 'reStructuredText'
@@ -217,7 +218,7 @@ def omisi_fast(mixture_stft, spectrograms_target, win_length, hop_length=None, i
 
         # iDFT
         Y_dft_norm = np.concatenate((Y_dft_corrected, Y_dft_corrected[-2:0:-1, :].conj()))
-        ifft_buffer = scipy.ifft(Y_dft_norm, n_fft, 0).real
+        ifft_buffer = scipy.fft.ifft(Y_dft_norm, n_fft, 0).real
         s_wind = ifft_window_multi * ifft_buffer[:win_length, :]
         # Overlap add
         s_ola = s_current + s_wind
@@ -226,7 +227,7 @@ def omisi_fast(mixture_stft, spectrograms_target, win_length, hop_length=None, i
             # windowing the current time segment
             y_win = fft_window_multi * s_ola
             # FFT
-            Y_dft = scipy.fft(y_win, n_fft, 0)[:n_freqs, :]
+            Y_dft = scipy.fft.fft(y_win, n_fft, 0)[:n_freqs, :]
             # Compute and distribute the mixing error
             mixing_error = mixture_stft[:, i] - np.sum(Y_dft, axis=1)
             Y_dft_corrected = Y_dft + np.repeat(mixing_error[:, np.newaxis], nsrc, axis=1) / nsrc
@@ -234,7 +235,7 @@ def omisi_fast(mixture_stft, spectrograms_target, win_length, hop_length=None, i
             Y_dft_norm = mag * np.exp(1j * np.angle(Y_dft_corrected))
             # inverse DFT
             Y_dft_norm = np.concatenate((Y_dft_norm, Y_dft_norm[-2:0:-1, :].conj()))
-            ifft_buffer = scipy.ifft(Y_dft_norm, n_fft, 0).real
+            ifft_buffer = scipy.fft.ifft(Y_dft_norm, n_fft, 0).real
             # Overlap add
             s_wind = ifft_window_multi * ifft_buffer[:win_length, :]
             s_ola = s_current + s_wind

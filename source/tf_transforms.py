@@ -51,7 +51,7 @@ def my_stft(x, n_fft=2048, hop_length=None, win_length=None, win_type='hann', dt
     for frame_index in range(nframes):
         time_beg = frame_index * hop_length
         fft_buffer = x[time_beg:time_beg + win_length, :] * fft_window_multi
-        stft_matrix[:, frame_index, :] = scipy.fft(fft_buffer, n_fft, 0)[:nfreqs, :]
+        stft_matrix[:, frame_index, :] = scipy.fft.fft(fft_buffer, n_fft, 0)[:nfreqs, :]
 
     # Remove the last dimension if there is only one source
     if len(dims)==1:
@@ -102,7 +102,7 @@ def my_istft(stft_matrix, hop_length=None, win_length=None, win_type='hann', dty
         sample_start = i * hop_length
         spec = stft_matrix[:, i, :]
         spec = np.concatenate((spec, spec[-2:0:-1, :].conj()), 0)
-        ifft_buffer = scipy.ifft(spec, n_fft, 0).real
+        ifft_buffer = scipy.fft.ifft(spec, n_fft, 0).real
         ytmp = ifft_window_multi * ifft_buffer[:win_length, :]
         y[sample_start:(sample_start + win_length), :] = y[sample_start:(sample_start + win_length), :] + ytmp
 

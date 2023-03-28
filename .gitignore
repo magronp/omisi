@@ -1,0 +1,5 @@
+*.pyc
+data/
+!.dummy.txt
+outputs/
+!.dummy.txt

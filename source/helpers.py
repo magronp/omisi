@@ -3,7 +3,7 @@
 
 import numpy as np
 import os
-import librosa
+import soundfile
 import matplotlib.pyplot as plt
 
 __author__ = 'Paul Magron -- IRIT'
@@ -24,14 +24,14 @@ def record_wav(sources, audio_folder_path, estim_or_oracle, algo_name, fs=16000)
         file1 = os.path.join(audio_folder_path, 'sig1.wav')
         file2 = os.path.join(audio_folder_path, 'sig2.wav')
         # Record the mixture
-        librosa.output.write_wav(os.path.join(audio_folder_path, 'mix.wav'), np.sum(sources, axis=1), fs)
+        soundfile.write(os.path.join(audio_folder_path, 'mix.wav'), np.sum(sources, axis=1), fs)
     else:
         file1 = os.path.join(audio_folder_path, 'sig1_' + estim_or_oracle + '_' + algo_name + '.wav')
         file2 = os.path.join(audio_folder_path, 'sig2_' + estim_or_oracle + '_' + algo_name + '.wav')
 
     # Record wav
-    librosa.output.write_wav(file1, sources[:, 0], fs)
-    librosa.output.write_wav(file2, sources[:, 1], fs)
+    soundfile.write(file1, sources[:, 0], fs)
+    soundfile.write(file2, sources[:, 1], fs)
     
 
 def folder_handler(parameters, indx_speaker=0):

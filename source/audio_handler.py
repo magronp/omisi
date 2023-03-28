@@ -26,14 +26,15 @@ class HINT_audio_handler(object):
         self.normalise=normalise
 
     def get_file_from_list(self, file_number):
-        '''
+        """
         Reads the audio file at [FILE_NUMBER] in the list of audio files into memory and returns an array with the
         contents of that file. Resamples audio file to the fs of the AUDIO_HANDLER object. Normalises file to peak = 1
         if normalise flag is set for the audio handler object.
 
         :param file_number: The location in the list of files in SELF.SPEAKER_FILES that we wish to return.
         :return: Array with audio data of the desired file, normalised and resampled according to parameters.
-        '''
+        """
+
         # IPython.embed()
         file = self.speaker_files[file_number]
         print('Getting File  ', file)
@@ -41,7 +42,7 @@ class HINT_audio_handler(object):
 
         audio_filename = os.path.basename(sf.info(file).name)
         audio_data_nonzero = audio_data[audio_data != 0]
-        if self.normalise == True:
+        if self.normalise:
             audio_data_nonzero = audio_data_nonzero / np.max(np.abs(audio_data_nonzero))
         if samplerate != self.fs:
             audio_data_nonzero = librosa.core.resample(audio_data_nonzero, orig_sr=samplerate, target_sr=self.fs)
@@ -60,7 +61,7 @@ class HINT_audio_handler(object):
         return self.speaker_files
 
     def get_all_audio_from_list(self):     #loads all the audio listed, resampled and concatenated.
-        '''
+        """
         Loads the audio files referenced in the list at SELF.SPEAKER_FILES into memory.
         Converts the samplerate to that specified when the HINT_AUDIO_HANDLER object was created, and also normalises
         each file (to peak value=1) if that flag is set in the object.
@@ -68,7 +69,7 @@ class HINT_audio_handler(object):
         N.B. Normalisation is not currently recommended.
         :return: Returns an array with all the audio files concatenated into one long array.
 
-        '''
+        """
         #todo: check that a file list has been created
         print("Getting the audio for the files in list")
 
@@ -78,30 +79,30 @@ class HINT_audio_handler(object):
         print(files_list)
         # First make all the training data for speaker 1
         #embed()
+        audio_data = None
         for file in files_list:
             audio_data, samplerate = sf.read(file)
             audio_data_nonzero = audio_data[audio_data != 0]  # REMOVE ZERO ENTRIES
-            if self.normalise == True:
+            if self.normalise:
                 audio_data_nonzero=audio_data_nonzero/np.max(np.abs(audio_data_nonzero))
             if samplerate != fs:
                 audio_data_nonzero = librosa.core.resample(audio_data_nonzero, orig_sr=samplerate, target_sr=fs)
             returned_audio_data = np.append(returned_audio_data, audio_data_nonzero)
-            self.audio_data=returned_audio_data
+            audio_data=returned_audio_data
 
         print("Done! Audio obtained")
-        return self.audio_data
+        return audio_data
 
     def load_all_audio_from_file_list(self):
-        '''
+        """
         A simpler interface to call both of the get files list and get_all_audio_from_list methods.
         First gets the file list, then loads each file from that list and returns the audio concatenated.
 
         :return:  Returns an array with all the audio files concatenated into one long array.
-        '''
+        """
 
         self.get_files_list()                       # get the list of files
         audio_data=self.get_all_audio_from_list()   # load the files.
         return audio_data                           # Return the files
-
 
 # EOF
