@@ -3,3 +3,5 @@ data/
 !.dummy.txt
 outputs/
 !.dummy.txt
+.idea/
+_pycache_/
